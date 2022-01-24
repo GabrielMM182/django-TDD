@@ -16,15 +16,22 @@ class AnimaisTestCase(LiveServerTestCase):
         """Teste de um usuario encontra um animal pesquisando"""
 
         # Gabriel, deseja encontrar um novo animal, para adotar
-
         # Gabriel encontra o buscarAnimal e descide usar então vê no menu do site escrito Busca Animal.
         home_page = self.browser.get(self.live_server_url + '/')
         brand_element = self.browser.find_element_by_css_selector('.navbar')
         self.assertEqual('Busca Animal', brand_element.text)
 
-        # Gabriel vê um campo para pesquisar animal 
+        # Gabriel vê um campo para pesquisar animal pelo nome e então pesquisa pelo animal leão no input
+        buscar_animal_input = self.browser.find_element_by_css_selector('input#buscar-animal')
+        self.assertEqual(buscar_animal_input.get_attribute('placeholder'), 'Exemplo:leão')
 
-        # Gabriel pesquisa pelo animal leão e clica no botão pesquisar
+        # Gabriel pesquisa pelo animal leão e clica no botão pesquisar em form
+        buscar_animal_input.send_keys('leão')
+        self.browser.find_element_by_css_selector('form button').click()
+
+        # O site acaba exbindo 4 caracteristicas do animal pesquisado (usando elements pois vai ser mais de uma caracteristica)
+        caracteristicas = self.browser.find_elements_by_css_selector('.result-description')
+        self.assertGreater(len(caracteristicas), 3)
 
         # Gabriel acaba desistindo de adota um leão
-        pass
+        

@@ -12,5 +12,6 @@ class AnimaisURLSTestCase(TestCase):
     def test_rota_url_utiliza_view_index(self):
         """Teste se a home da aplicação utiliza a função index da views e se ocorrer o http 200 significa que passou corretamente"""
         request = self.factory.get('/')
-        response = index(request)
-        self.assertEqual(response.status_code, 200)
+        with self.assertTemplateUsed('index.html'):
+            response = index(request)
+            self.assertEqual(response.status_code, 200)
