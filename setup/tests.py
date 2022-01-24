@@ -1,12 +1,19 @@
 from django.test import LiveServerTestCase
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
+from animais.models import Animal
 
 class AnimaisTestCase(LiveServerTestCase):
 
-    # abre o google chrome para teste (precisa desse nome em específico setUp e desse caminho em específico para funcionar)
+    # abre o google chrome para teste (precisa desse nome em específico setUp e desse caminho em específico para funcionar) e cria o animal que vai ser procurado com suas caracteristicas
     def setUp(self):
         self.browser = webdriver.Chrome(ChromeDriverManager().install())
+        self.animal = Animal.objects.create(
+            nome_animal = 'Leão',
+            predador = 'Sim',
+            venenoso = 'Não',
+            domestico = 'Não'
+        )
 
     # fecha o google chrome (precisa desse nome em específico tearDown)
     def tearDown(self):
@@ -23,7 +30,7 @@ class AnimaisTestCase(LiveServerTestCase):
 
         # Gabriel vê um campo para pesquisar animal pelo nome e então pesquisa pelo animal leão no input
         buscar_animal_input = self.browser.find_element_by_css_selector('input#buscar-animal')
-        self.assertEqual(buscar_animal_input.get_attribute('placeholder'), 'Exemplo:leão')
+        self.assertEqual(buscar_animal_input.get_attribute('placeholder'), 'Exemplo: leão, urso...')
 
         # Gabriel pesquisa pelo animal leão e clica no botão pesquisar em form
         buscar_animal_input.send_keys('leão')
